@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyConnect - Plateforme Étudiante</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            margin: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px 20px;
+            color: white;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 20px;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.own {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.other {
+            background: #e9ecef;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-info {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+            gap: 15px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 12px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .file-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 2px dashed #dee2e6;
+            text-align: center;
+        }
+
+        .upload-area {
+            background: white;
+            border: 3px dashed #dee2e6;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: scale(1.02);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>📚 StudyConnect</h1>
+                <p>Plateforme collaborative étudiante</p>
+            </div>
+            
+            <nav>
+                <div class="nav-item active" onclick="showSection('chat')">
+                    <i>💬</i>
+                    <span>Chat Global</span>
+                </div>
+                <div class="nav-item" onclick="showSection('posts')">
+                    <i>📋</i>
+                    <span>Publications</span>
+                </div>
+                <div class="nav-item" onclick="showSection('files')">
+                    <i>📎</i>
+                    <span>Fichiers Partagés</span>
+                </div>
+                <div class="nav-item" onclick="showSection('profile')">
+                    <i>👤</i>
+                    <span>Mon Profil</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2 id="page-title">Chat Global</h2>
+                <div class="user-info">
+                    <div class="avatar" id="user-avatar">É</div>
+                    <span id="username">Étudiant</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Section Chat -->
+                <section id="chat" class="section active">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message other">
+                                <div class="message-info">Admin • Il y a 5 min</div>
+                                <div>Bienvenue sur StudyConnect ! 🎉 Ici vous pouvez échanger, partager des documents et collaborer.</div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="message-input" placeholder="Tapez votre message..." onkeypress="handleEnter(event)">
+                            <button class="btn btn-primary" onclick="sendMessage()">Envoyer</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Publications -->
+                <section id="posts" class="section">
+                    <div class="posts-grid" id="posts-container">
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="avatar">M</div>
+                                <div>
+                                    <strong>Marie Dupont</strong>
+                                    <div style="font-size: 12px; color: #666;">Il y a 2 heures</div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Quelqu'un aurait-il les notes du cours de mathématiques d'hier ? J'ai manqué la partie sur les intégrales 📚
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 14px;">👍 5</button>
+                                <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 14px;">💬 Répondre</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Fichiers -->
+                <section id="files" class="section">
+                    <div class="upload-area" onclick="document.getElementById('file-input').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <h3>📁 Glissez vos fichiers ici</h3>
+                        <p>ou cliquez pour sélectionner des PDF, images, documents...</p>
+                        <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display: none;" onchange="handleFileSelect(event)">
+                    </div>
+                    <div id="shared-files">
+                        <div class="file-preview">
+                            <h4>📄 Cours_Mathematiques.pdf</h4>
+                            <p>Partagé par Alex Martin • 156 KB</p>
+                            <button class="btn btn-primary" style="margin-top: 10px;">Télécharger</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Profil -->
+                <section id="profile" class="section">
+                    <div style="background: white; padding: 30px; border-radius: 20px;">
+                        <h3>Mon Profil</h3>
+                        <div class="form-group">
+                            <label>Nom d'utilisateur</label>
+                            <input type="text" id="profile-username" value="Étudiant">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="profile-email" value="etudiant@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea id="profile-bio" rows="4" placeholder="Parlez-nous de vous...">Étudiant passionné par les sciences et la technologie.</textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="updateProfile()">Sauvegarder</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bouton flottant pour nouveau post -->
+    <button class="floating-btn" onclick="openNewPostModal()" title="Nouveau post">+</button>
+
+    <!-- Modal nouveau post -->
+    <div id="new-post-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>📝 Nouvelle Publication</h3>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea id="post-content" rows="4" placeholder="Que voulez-vous partager ?"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Image (optionnel)</label>
+                <input type="file" id="post-image" accept="image/*" onchange="previewImage(event)">
+                <div id="image-preview"></div>
+            </div>
+            <button class="btn btn-primary" onclick="createPost()">Publier</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let messages = [];
+        let posts = [];
+        let sharedFiles = [];
+        let currentUser = 'Étudiant';
+
+        // Gestion de la navigation
+        function showSection(sectionName) {
+            // Masquer toutes les sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Retirer la classe active de tous les nav-items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Afficher la section sélectionnée
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Ajouter la classe active au nav-item cliqué
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Mettre à jour le titre
+            const titles = {
+                'chat': 'Chat Global',
+                'posts': 'Publications',
+                'files': 'Fichiers Partagés',
+                'profile': 'Mon Profil'
+            };
+            document.getElementById('page-title').textContent = titles[sectionName];
+        }
+
+        // Gestion du chat
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, currentUser, true);
+                input.value = '';
+                
+                // Réponse automatique simulée
+                setTimeout(() => {
+                    const responses = [
+                        "Merci pour ton message ! 👍",
+                        "Intéressant ! Peux-tu en dire plus ?",
+                        "Je suis d'accord avec toi !",
+                        "Bonne question ! Quelqu'un d'autre a une idée ?",
+                        "Super ! Merci pour le partage 🎉"
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, "Autre Étudiant", false);
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        function addMessage(content, sender, isOwn) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : 'other'}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-info">${sender} • ${timeString}</div>
+                <div>${content}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Gestion des posts
+        function openNewPostModal() {
+            document.getElementById('new-post-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('new-post-modal').style.display = 'none';
+            document.getElementById('post-content').value = '';
+            document.getElementById('post-image').value = '';
+            document.getElementById('image-preview').innerHTML = '';
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('image-preview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; max-width: 200px; border-radius: 10px; margin-top: 10px;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function createPost() {
+            const content = document.getElementById('post-content').value.trim();
+            const imageFile = document.getElementById('post-image').files[0];
+            
+            if (content || imageFile) {
+                const post = {
+                    id: Date.now(),
+                    content: content,
+                    author: currentUser,
+                    timestamp: new Date(),
+                    likes: 0,
+                    image: null
+                };
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        post.image = e.target.result;
+                        addPostToGrid(post);
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    addPostToGrid(post);
+                }
+
+                closeModal();
+            }
+        }
+
+        function addPostToGrid(post) {
+            const postsContainer = document.getElementById('posts-container');
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-card';
+            
+            const timeString = post.timestamp.toLocaleString('fr-FR');
+            const initials = post.author.split(' ').map(name => name[0]).join('').toUpperCase();
+            
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <div class="avatar">${initials}</div>
+                    <div>
+                        <strong>${post.author}</strong>
+                        <div style="font-size: 12px; color: #666;">${timeString}</div>
+                    </div>
+                </div>
+                ${post.content ? `<div class="post-content">${post.content}</div>` : ''}
+                ${post.image ? `<img src="${post.image}" class="post-image" alt="Image partagée">` : ''}
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 14px;" onclick="likePost(${post.id})">👍 ${post.likes}</button>
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 14px;">💬 Répondre</button>
+                </div>
+            `;
+            
+            postsContainer.insertBefore(postDiv, postsContainer.firstChild);
+        }
+
+        function likePost(postId) {
+            // Simuler un like
+            console.log('Post liké:', postId);
+        }
+
+        // Gestion des fichiers
+        function handleDrop(event) {
+            event.preventDefault();
+            event.target.classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.target.classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.target.classList.remove('dragover');
+        }
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            const sharedFilesContainer = document.getElementById('shared-files');
+            
+            Array.from(files).forEach(file => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'file-preview';
+                
+                const fileIcon = getFileIcon(file.type);
+                const fileSize = formatFileSize(file.size);
+                
+                fileDiv.innerHTML = `
+                    <h4>${fileIcon} ${file.name}</h4>
+                    <p>Partagé par ${currentUser} • ${fileSize}</p>
+                    <button class="btn btn-primary" style="margin-top: 10px;" onclick="downloadFile('${file.name}')">Télécharger</button>
+                `;
+                
+                sharedFilesContainer.appendChild(fileDiv);
+            });
+        }
+
+        function getFileIcon(fileType) {
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('image')) return '🖼️';
+            if (fileType.includes('document') || fileType.includes('word')) return '📝';
+            return '📎';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function downloadFile(filename) {
+            alert('Téléchargement simulé: ' + filename);
+        }
+
+        // Gestion du profil
+        function updateProfile() {
+            const username = document.getElementById('profile-username').value;
+            const email = document.getElementById('profile-email').value;
+            const bio = document.getElementById('profile-bio').value;
+            
+            currentUser = username;
+            document.getElementById('username').textContent = username;
+            document.getElementById('user-avatar').textContent = username[0].toUpperCase();
+            
+            alert('Profil mis à jour avec succès !');
+        }
+
+        // Fermer modal en cliquant en dehors
+        window.onclick = function(event) {
+            const modal = document.getElementById('new-post-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Messages de bienvenue
+        setTimeout(() => {
+            addMessage("Salut tout le monde ! 👋", "Julie Martin", false);
+        }, 2000);
+
+        setTimeout(() => {
+            addMessage("Est-ce que quelqu'un a les exercices de physique pour demain ?", "Thomas Durand", false);
+        }, 4000);
+    </script>
+</body>
+</html>
