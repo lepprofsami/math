@@ -1,968 +1,334 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MathLearn - Plateforme d'Apprentissage</title>
-    <style>
-        /* ==== CSS Intégré ==== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .header h1 {
-            color: #4a5568;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 40px;
-            max-width: 500px;
-            margin: 0 auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: linear-gradient(45deg, #f093fb, #f5576c);
-            color: white;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 15px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .user-type-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .user-type-btn {
-            flex: 1;
-            padding: 10px;
-            background: #f8f9fa;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .user-type-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .dashboard {
-            display: none;
-        }
-
-        .dashboard.active {
-            display: block;
-        }
-
-        .dashboard-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 20px;
-        }
-
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .classes-section, .assignments-section, .create-class-section, .manage-students-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            color: #4a5568;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .class-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .class-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .class-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .class-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            transform: rotate(45deg);
-            transition: all 0.5s ease;
-        }
-
-        .class-card:hover::before {
-            top: -60%;
-            left: -60%;
-        }
-
-        .class-info {
-            position: relative;
-            z-index: 1;
-        }
-
-        .class-name {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .class-details {
-            opacity: 0.9;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-
-        .class-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9em;
-        }
-
-        .class-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .class-actions button {
-            padding: 6px 12px;
-            font-size: 12px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .class-actions button:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .assignment-item {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .assignment-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .assignment-title {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #4a5568;
-        }
-
-        .assignment-meta {
-            font-size: 0.85em;
-            color: #666;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .chat-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-header {
-            padding: 15px;
-            border-bottom: 2px solid #e2e8f0;
-            margin-bottom: 15px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .message {
-            background: white;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .message-author {
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .message-time {
-            font-size: 0.8em;
-            color: #666;
-            float: right;
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 25px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .send-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .close-btn {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-            color: #333;
-        }
-
-        .student-list {
-            max-height: 300px;
-            overflow-y: auto;
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .student-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .student-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .student-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f093fb, #f5576c);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .student-password {
-            font-family: monospace;
-            background: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            color: #666;
-            margin-left: 10px;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            z-index: 1001;
-            transform: translateX(400px);
-            transition: all 0.3s ease;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: #48bb78;
-        }
-
-        .notification.error {
-            background: #f56565;
-        }
-
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-
-        .status-pending {
-            background: #fed7d7;
-            color: #c53030;
-        }
-
-        .status-submitted {
-            background: #c6f6d5;
-            color: #22543d;
-        }
-
-        .status-graded {
-            background: #bee3f8;
-            color: #2a69ac;
-        }
-
-        .math-editor {
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 100px;
-            font-family: 'Courier New', monospace;
-            background: #f8f9fa;
-        }
-
-        .demo-credentials {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-
-        .demo-credentials h4 {
-            color: #4a5568;
-            margin-bottom: 10px;
-        }
-
-        .demo-credentials p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .demo-credentials strong {
-            color: #333;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .class-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MathLearn - Plateforme d'Apprentissage</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    color: #4a5568;
+  }
+  .login-container, .dashboard {
+    margin-top: 20px;
+  }
+  .login-container {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 15px;
+  }
+  input[type="text"], input[type="email"], input[type="password"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #667eea;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background: #5a6bd1;
+  }
+  .dashboard {
+    display: none;
+  }
+  .class-item, .assignment-item {
+    background: #f0f4ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal.active {
+    display: flex;
+  }
+  .modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    padding: 25px;
+  }
+  .close-btn {
+    float: right;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #777;
+  }
+  .close-btn:hover {
+    color: #333;
+  }
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .notification.show {
+    opacity: 1;
+  }
+  .notification.success {
+    background: #48bb78;
+  }
+  .notification.error {
+    background: #f56565;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>🧮 MathLearn</h1>
-            <p style="text-align: center; color: #666; margin-top: 10px;">
-                Plateforme d'apprentissage mathématiques collaborative
-            </p>
-        </div>
+<div class="container">
+  <div class="header">
+    <h1>🧾 MathLearn</h1>
+    <p style="text-align: center; color: #666; margin-top: 10px;">
+      Plateforme d'apprentissage mathématiques collaborative
+    </p>
+  </div>
 
-        <!-- Login Screen -->
-        <div id="loginScreen" class="login-container">
-            <h2 style="text-align: center; margin-bottom: 30px;">Connexion</h2>
-            
-            <div class="user-type-selector">
-                <div class="user-type-btn active" onclick="setUserType('professor', event)">
-                    👨‍🏫 Professeur
-                </div>
-                <div class="user-type-btn" onclick="setUserType('student', event)">
-                    👨‍🎓 Étudiant
-                </div>
-            </div>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-container">
+    <h2 style="text-align: center; margin-bottom: 30px;">Connexion</h2>
+    <label for="email">Email :</label>
+    <input type="email" id="email" required placeholder="prof@mathlearn.com" />
+    <label for="password">Mot de passe :</label>
+    <input type="password" id="password" required placeholder="admin123" />
+    <button onclick="handleLogin()">Se connecter</button>
 
-            <form class="login-form" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="email">Email :</label>
-                    <input type="email" id="email" required />
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" required />
-                </div>
-                <button type="submit" class="btn btn-primary">Se connecter</button>
-            </form>
+    <div class="demo-credentials" style="margin-top: 30px;">
+      <h4>🔑 Comptes de démonstration</h4>
+      <p><strong>Professeur :</strong> prof@mathlearn.com | admin123</p>
+      <p><strong>Étudiant :</strong> Utilisez l'email et le mot de passe fournis par votre professeur</p>
+    </div>
+  </div>
 
-            <div class="demo-credentials">
-                <h4>🔑 Comptes de démonstration</h4>
-                <p><strong>Professeur :</strong> prof@mathlearn.com | admin123</p>
-                <p><strong>Étudiant :</strong> Utilisez l'email et le mot de passe fournis par votre professeur</p>
-            </div>
-        </div>
+  <!-- Dashboard -->
+  <div id="dashboard" class="dashboard">
+    <h2>Bienvenue, <span id="userNameDisplay"></span> !</h2>
 
-        <!-- Dashboard -->
-        <div id="dashboard" class="dashboard">
-            <!-- Exemple simplifié de contenu de tableau de bord -->
-            <div class="dashboard-header">
-                <div class="user-info">
-                    <div class="avatar" id="userAvatar">P</div>
-                    <div>
-                        <div id="userEmail">prof@mathlearn.com</div>
-                        <div id="userRole">Professeur</div>
-                    </div>
-                </div>
-                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
-            </div>
-
-            <div class="main-content">
-                <div class="left-panel">
-                    <section class="classes-section">
-                        <h2 class="section-title">Mes Classes</h2>
-                        <div class="class-grid" id="classGrid">
-                            <!-- Cartes des classes insérées ici dynamiquement -->
-                        </div>
-                        <button class="btn btn-primary" onclick="openModal('createClassModal')">➕ Créer une classe</button>
-                    </section>
-
-                    <section class="assignments-section">
-                        <h2 class="section-title">Mes Devoirs</h2>
-                        <div id="assignmentsList">
-                            <!-- Liste des devoirs -->
-                        </div>
-                        <button class="btn btn-primary" onclick="openModal('assignmentModal')">➕ Créer un devoir</button>
-                    </section>
-                </div>
-
-                <div class="chat-panel">
-                    <div class="chat-header">
-                        <h3>💬 Chat de la classe</h3>
-                    </div>
-                    <div class="chat-messages" id="chatMessages"></div>
-                    <div class="chat-input">
-                        <input type="text" id="chatInput" placeholder="Tapez votre message..." />
-                        <button class="send-btn" onclick="sendMessage()">Envoyer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal pour créer des devoirs -->
-        <div id="assignmentModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeModal('assignmentModal')">&times;</span>
-                <h3>📝 Créer un Nouveau Devoir</h3>
-                <div class="form-group">
-                    <label>Titre du devoir:</label>
-                    <input type="text" id="assignmentTitle" placeholder="ex: Équations du second degré" />
-                </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <textarea id="assignmentDescription" placeholder="Instructions et description du devoir..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Contenu mathématique:</label>
-                    <div class="math-editor" id="mathEditor" contenteditable="true">
-                        Tapez ici vos formules mathématiques...
-                        <br />Exemple: f(x) = ax² + bx + c
-                        <br />Δ = b² - 4ac
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Date d'échéance:</label>
-                    <input type="datetime-local" id="assignmentDueDate" />
-                </div>
-                <div class="form-group">
-                    <label>Classe:</label>
-                    <select id="assignmentClass">
-                        <option value="">Sélectionner une classe</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary" onclick="createAssignment()">
-                    ✅ Créer le Devoir
-                </button>
-            </div>
-        </div>
-
-        <!-- Modal pour créer une classe -->
-        <div id="createClassModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeModal('createClassModal')">&times;</span>
-                <h3>➕ Créer une nouvelle classe</h3>
-                <div class="form-group">
-                    <label>Nom de la classe:</label>
-                    <input type="text" id="newClassName" placeholder="ex: Terminale S3" />
-                </div>
-                <button class="btn btn-primary" onclick="createClass()">
-                    Créer la classe
-                </button>
-            </div>
-        </div>
+    <!-- Création classe -->
+    <div>
+      <h3>Créer une nouvelle classe</h3>
+      <input type="text" id="newClassName" placeholder="Nom de la classe" />
+      <button onclick="createClass()">Créer la classe</button>
     </div>
 
-    <script>
-        // ==== JavaScript Intégré ====
+    <!-- Liste des classes -->
+    <div style="margin-top: 30px;">
+      <h3>Mes classes</h3>
+      <div id="classesList"></div>
+    </div>
 
-        // Données temporaires pour démo (remplacer par une vraie API/backend)
-        let currentUser = null;
-        let currentUserType = 'professor'; // ou 'student'
-        let classes = [];
-        let assignments = [];
-        let chatMessages = [];
+    <!-- Création devoir -->
+    <div style="margin-top: 30px;">
+      <h3>Créer un nouveau devoir</h3>
+      <input type="text" id="newAssignmentTitle" placeholder="Titre du devoir" />
+      <textarea id="newAssignmentDesc" placeholder="Description du devoir"></textarea>
+      <select id="assignmentClassSelect">
+        <option value="">-- Choisir une classe --</option>
+      </select>
+      <button onclick="createAssignment()">Créer le devoir</button>
+    </div>
 
-        function setUserType(type, event) {
-            currentUserType = type;
-            document.querySelectorAll('.user-type-btn').forEach(btn => btn.classList.remove('active'));
-            if(event) event.currentTarget.classList.add('active');
-        }
+    <!-- Liste devoirs -->
+    <div style="margin-top: 30px;">
+      <h3>Mes devoirs</h3>
+      <div id="assignmentsList"></div>
+    </div>
 
-        function handleLogin(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+    <button style="margin-top: 40px; background:#e74c3c;" onclick="logout()">Déconnexion</button>
+  </div>
 
-            // Validation basique (demo)
-            if(currentUserType === 'professor') {
-                if(email === 'prof@mathlearn.com' && password === 'admin123') {
-                    currentUser = {email, role: 'Professeur'};
-                    showDashboard();
-                    notify('Connexion réussie', 'success');
-                } else {
-                    notify('Email ou mot de passe incorrect', 'error');
-                }
-            } else {
-                // Pour l'étudiant, on simule juste la connexion
-                if(email && password) {
-                    currentUser = {email, role: 'Étudiant'};
-                    showDashboard();
-                    notify('Connexion réussie', 'success');
-                } else {
-                    notify('Veuillez remplir tous les champs', 'error');
-                }
-            }
-        }
+</div>
 
-        function showDashboard() {
-            document.getElementById('loginScreen').style.display = 'none';
-            const dash = document.getElementById('dashboard');
-            dash.style.display = 'block';
-            document.getElementById('userEmail').textContent = currentUser.email;
-            document.getElementById('userRole').textContent = currentUser.role;
-            document.getElementById('userAvatar').textContent = currentUser.role[0];
-            loadClasses();
-            loadAssignments();
-            loadChat();
-        }
+<div id="notification" class="notification"></div>
 
-        function logout() {
-            currentUser = null;
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('loginScreen').style.display = 'block';
-            clearInputs();
-        }
+<script>
+  // Utilisateur de démonstration
+  const demoUser = {
+    email: 'prof@mathlearn.com',
+    password: 'admin123',
+    name: 'Professeur Martin',
+    role: 'professor'
+  };
 
-        function clearInputs() {
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-        }
+  let classes = [];
+  let assignments = [];
+  let currentUser = null;
 
-        function notify(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.classList.add('notification', type, 'show');
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 3000);
-        }
+  function notify(message, type = 'success') {
+    const notif = document.getElementById('notification');
+    notif.textContent = message;
+    notif.className = 'notification show ' + (type === 'error' ? 'error' : 'success');
+    setTimeout(() => {
+      notif.className = 'notification';
+    }, 3000);
+  }
 
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            if(id === 'assignmentModal') {
-                fillAssignmentClassOptions();
-            }
-        }
+  function loadData() {
+    const storedClasses = localStorage.getItem('mathlearn_classes');
+    const storedAssignments = localStorage.getItem('mathlearn_assignments');
+    if (storedClasses) classes = JSON.parse(storedClasses);
+    if (storedAssignments) assignments = JSON.parse(storedAssignments);
+  }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-            if(id === 'assignmentModal') {
-                clearAssignmentForm();
-            }
-            if(id === 'createClassModal') {
-                document.getElementById('newClassName').value = '';
-            }
-        }
+  function saveData() {
+    localStorage.setItem('mathlearn_classes', JSON.stringify(classes));
+    localStorage.setItem('mathlearn_assignments', JSON.stringify(assignments));
+  }
 
-        // Gestion des classes
-        function loadClasses() {
-            const container = document.getElementById('classGrid');
-            container.innerHTML = '';
-            if(classes.length === 0) {
-                container.innerHTML = '<p>Aucune classe créée pour le moment.</p>';
-                return;
-            }
-            classes.forEach((cls, idx) => {
-                const div = document.createElement('div');
-                div.className = 'class-card';
-                div.innerHTML = `
-                    <div class="class-info">
-                        <div class="class-name">${cls.name}</div>
-                        <div class="class-details">Nombre d'étudiants: ${cls.students.length}</div>
-                        <div class="class-stats">
-                            <span>Devoirs: ${cls.assignments.length}</span>
-                        </div>
-                        <div class="class-actions">
-                            <button onclick="deleteClass(${idx})">Supprimer</button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
+  function renderClasses() {
+    const list = document.getElementById('classesList');
+    const select = document.getElementById('assignmentClassSelect');
 
-        function createClass() {
-            const name = document.getElementById('newClassName').value.trim();
-            if(name.length < 3) {
-                notify('Le nom de la classe doit contenir au moins 3 caractères', 'error');
-                return;
-            }
-            classes.push({name, students: [], assignments: []});
-            loadClasses();
-            closeModal('createClassModal');
-            notify(`Classe "${name}" créée avec succès`, 'success');
-        }
+    if (classes.length === 0) {
+      list.innerHTML = '<p>Aucune classe créée pour le moment.</p>';
+      select.innerHTML = '<option value="">-- Choisir une classe --</option>';
+      return;
+    }
 
-        function deleteClass(index) {
-            if(confirm(`Supprimer la classe "${classes[index].name}" ? Cette action est irréversible.`)) {
-                classes.splice(index, 1);
-                loadClasses();
-                notify('Classe supprimée', 'success');
-            }
-        }
+    list.innerHTML = '';
+    select.innerHTML = '<option value="">-- Choisir une classe --</option>';
 
-        // Gestion des devoirs
-        function fillAssignmentClassOptions() {
-            const select = document.getElementById('assignmentClass');
-            select.innerHTML = '<option value="">Sélectionner une classe</option>';
-            classes.forEach((cls, idx) => {
-                const opt = document.createElement('option');
-                opt.value = idx;
-                opt.textContent = cls.name;
-                select.appendChild(opt);
-            });
-        }
+    classes.forEach((cls, i) => {
+      const div = document.createElement('div');
+      div.className = 'class-item';
+      div.textContent = cls.name;
+      list.appendChild(div);
 
-        function createAssignment() {
-            const title = document.getElementById('assignmentTitle').value.trim();
-            const description = document.getElementById('assignmentDescription').value.trim();
-            const content = document.getElementById('mathEditor').innerText.trim();
-            const dueDate = document.getElementById('assignmentDueDate').value;
-            const classIndex = document.getElementById('assignmentClass').value;
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = cls.name;
+      select.appendChild(opt);
+    });
+  }
 
-            if(!title || !description || !content || !dueDate || classIndex === '') {
-                notify('Veuillez remplir tous les champs du devoir', 'error');
-                return;
-            }
+  function renderAssignments() {
+    const list = document.getElementById('assignmentsList');
+    if (assignments.length === 0) {
+      list.innerHTML = '<p>Aucun devoir créé.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    assignments.forEach((a) => {
+      const div = document.createElement('div');
+      div.className = 'assignment-item';
+      div.innerHTML = `<strong>${a.title}</strong><br/><em>${a.description}</em><br/><small>Classe: ${classes[a.classIndex]?.name || 'Inconnue'}</small>`;
+      list.appendChild(div);
+    });
+  }
 
-            const assignment = {
-                title,
-                description,
-                content,
-                dueDate,
-                classIndex: parseInt(classIndex, 10),
-                createdAt: new Date().toISOString(),
-            };
+  function createClass() {
+    const nameInput = document.getElementById('newClassName');
+    const name = nameInput.value.trim();
+    if (!name) {
+      notify('Le nom de la classe est obligatoire.', 'error');
+      return;
+    }
+    classes.push({ name });
+    saveData();
+    renderClasses();
+    nameInput.value = '';
+    notify(`Classe "${name}" créée.`);
+  }
 
-            assignments.push(assignment);
-            classes[assignment.classIndex].assignments.push(assignment);
-            loadAssignments();
-            closeModal('assignmentModal');
-            notify(`Devoir "${title}" créé avec succès`, 'success');
-        }
+  function createAssignment() {
+    const titleInput = document.getElementById('newAssignmentTitle');
+    const descInput = document.getElementById('newAssignmentDesc');
+    const classSelect = document.getElementById('assignmentClassSelect');
 
-        function clearAssignmentForm() {
-            document.getElementById('assignmentTitle').value = '';
-            document.getElementById('assignmentDescription').value = '';
-            document.getElementById('mathEditor').innerHTML = 'Tapez ici vos formules mathématiques...<br>Exemple: f(x) = ax² + bx + c<br>Δ = b² - 4ac';
-            document.getElementById('assignmentDueDate').value = '';
-            document.getElementById('assignmentClass').value = '';
-        }
+    const title = titleInput.value.trim();
+    const desc = descInput.value.trim();
+    const classIndex = classSelect.value;
 
-        function loadAssignments() {
-            const container = document.getElementById('assignmentsList');
-            container.innerHTML = '';
-            if(assignments.length === 0) {
-                container.innerHTML = '<p>Aucun devoir créé pour le moment.</p>';
-                return;
-            }
+    if (!title || !desc || classIndex === '') {
+      notify('Veuillez remplir tous les champs pour le devoir.', 'error');
+      return;
+    }
 
-            assignments.forEach((a, idx) => {
-                const div = document.createElement('div');
-                div.className = 'assignment-item';
-                div.innerHTML = `
-                    <div class="assignment-title">${a.title}</div>
-                    <div>${a.description}</div>
-                    <div style="font-size: 0.8em; color: #999; margin-top: 5px;">Échéance : ${new Date(a.dueDate).toLocaleString()}</div>
-                `;
-                container.appendChild(div);
-            });
-        }
+    assignments.push({ title, description: desc, classIndex: Number(classIndex) });
+    saveData();
+    renderAssignments();
 
-        // Chat (simple démo)
-        function loadChat() {
-            const container = document.getElementById('chatMessages');
-            container.innerHTML = '';
-            if(chatMessages.length === 0) {
-                container.innerHTML = '<p>Aucun message pour le moment.</p>';
-                return;
-            }
-            chatMessages.forEach(m => {
-                const div = document.createElement('div');
-                div.className = 'message';
-                div.innerHTML = `
-                    <div class="message-author">${m.author}</div>
-                    <div class="message-text">${m.text}</div>
-                    <div class="message-time">${new Date(m.time).toLocaleTimeString()}</div>
-                `;
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
+    titleInput.value = '';
+    descInput.value = '';
+    classSelect.value = '';
 
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if(!text) return;
-            const message = {
-                author: currentUser.email,
-                text,
-                time: new Date().toISOString()
-            };
-            chatMessages.push(message);
-            loadChat();
-            input.value = '';
-        }
-    </script>
+    notify(`Devoir "${title}" créé.`);
+  }
+
+  function handleLogin() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (email === demoUser.email && password === demoUser.password) {
+      currentUser = demoUser;
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('userNameDisplay').textContent = currentUser.name;
+
+      loadData();
+      renderClasses();
+      renderAssignments();
+
+      notify(`Bienvenue, ${currentUser.name} !`);
+    } else {
+      notify('Email ou mot de passe incorrect.', 'error');
+    }
+  }
+
+  function logout() {
+    currentUser = null;
+    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+    notify('Vous êtes déconnecté.');
+  }
+</script>
 </body>
 </html>
