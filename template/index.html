@@ -1,299 +1,427 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MathLearn - Inscription & Connexion</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 480px;
-    margin: auto;
-    padding: 10px;
-    background: #f8f9fa;
-  }
-  h1, h2 {
-    text-align: center;
-    color: #2c3e50;
-  }
-  form {
-    background: white;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0 0 6px #ccc;
-    margin-bottom: 20px;
-  }
-  label {
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
-  }
-  input[type=email], input[type=password], input[type=text], select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    box-sizing: border-box;
-  }
-  button {
-    margin-top: 15px;
-    padding: 10px;
-    width: 100%;
-    background: #2980b9;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  button:hover {
-    background: #3498db;
-  }
-  .error, .success {
-    margin-top: 10px;
-    font-weight: bold;
-    text-align: center;
-  }
-  .error { color: #e74c3c; }
-  .success { color: #27ae60; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MathLearn - Plateforme d'Apprentissage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 10px;
+      background: #f8f9fa;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    form {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 6px #ccc;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+    input[type=email], input[type=password], input[type=text], select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #2980b9;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #3498db;
+    }
+    .error, .success {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .error { color: #e74c3c; }
+    .success { color: #27ae60; }
 
-  .link {
-    margin-top: 15px;
-    text-align: center;
-    color: #2980b9;
-    cursor: pointer;
-    user-select: none;
-  }
+    .link {
+      margin-top: 15px;
+      text-align: center;
+      color: #2980b9;
+      cursor: pointer;
+      user-select: none;
+    }
 
-  /* Hide sections by default */
-  #signupScreen, #dashboard {
-    display: none;
-  }
-</style>
+    /* Sections cachées par défaut */
+    #signupScreen, #dashboard, #assignmentModal, #dashboardProfessor {
+      display: none;
+    }
+
+    /* Header */
+    .header h1 {
+      margin-bottom: 5px;
+    }
+    .header p {
+      text-align: center;
+      color: #666;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    /* User type selector */
+    .user-type-selector {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .user-type-btn {
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: 1px solid #2980b9;
+      color: #2980b9;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+    .user-type-btn.active {
+      background: #2980b9;
+      color: white;
+    }
+
+  </style>
 </head>
 <body>
+  <div class="container">
 
-<h1>🧾 MathLearn</h1>
+    <!-- Header -->
+    <div class="header">
+      <h1>🧾 MathLearn</h1>
+      <p>Plateforme d'apprentissage mathématiques collaborative</p>
+    </div>
 
-<!-- CONNEXION -->
-<div id="loginScreen">
-  <h2>Connexion</h2>
-  <form id="loginForm" onsubmit="handleLogin(event)">
-    <label for="loginEmail">Email :</label>
-    <input type="email" id="loginEmail" required />
-    <label for="loginPassword">Mot de passe :</label>
-    <input type="password" id="loginPassword" required />
-    <button type="submit">Se connecter</button>
-    <p id="loginError" class="error"></p>
-  </form>
-  <p class="link" onclick="showSignup()">Pas encore de compte ? Inscrivez-vous</p>
-</div>
+    <!-- Écran de connexion -->
+    <div id="loginScreen">
+      <h2>Connexion</h2>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <label for="loginEmail">Email :</label>
+        <input type="email" id="loginEmail" required />
+        <label for="loginPassword">Mot de passe :</label>
+        <input type="password" id="loginPassword" required />
+        <button type="submit">Se connecter</button>
+        <p id="loginError" class="error"></p>
+      </form>
+      <p class="link" onclick="showSignup()">Pas encore de compte ? Inscrivez-vous</p>
+    </div>
 
-<!-- INSCRIPTION ÉLÈVE -->
-<div id="signupScreen">
-  <h2>Inscription Élève</h2>
-  <form id="signupForm" onsubmit="handleSignup(event)">
-    <label for="signupEmail">Email :</label>
-    <input type="email" id="signupEmail" required />
-    <label for="signupPassword">Mot de passe :</label>
-    <input type="password" id="signupPassword" required />
-    <label for="signupConfirmPassword">Confirmer le mot de passe :</label>
-    <input type="password" id="signupConfirmPassword" required />
-    <label for="signupClass">Choisissez votre classe :</label>
-    <select id="signupClass" required>
-      <option value="">-- Choisir une classe --</option>
-    </select>
-    <button type="submit">Créer un compte</button>
-    <p id="signupError" class="error"></p>
-    <p id="signupSuccess" class="success"></p>
-  </form>
-  <p class="link" onclick="showLogin()">Déjà un compte ? Connectez-vous</p>
-</div>
+    <!-- Écran d'inscription élève -->
+    <div id="signupScreen">
+      <h2>Inscription Élève</h2>
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <label for="signupEmail">Email :</label>
+        <input type="email" id="signupEmail" required />
+        <label for="signupPassword">Mot de passe :</label>
+        <input type="password" id="signupPassword" required />
+        <label for="signupConfirmPassword">Confirmer le mot de passe :</label>
+        <input type="password" id="signupConfirmPassword" required />
+        <label for="signupClass">Choisissez votre classe :</label>
+        <select id="signupClass" required>
+          <option value="">-- Choisir une classe --</option>
+        </select>
+        <button type="submit">Créer un compte</button>
+        <p id="signupError" class="error"></p>
+        <p id="signupSuccess" class="success"></p>
+      </form>
+      <p class="link" onclick="showLogin()">Déjà un compte ? Connectez-vous</p>
+    </div>
 
-<!-- DASHBOARD SIMPLIFIÉ -->
-<div id="dashboard">
-  <h2>Bienvenue, <span id="userName"></span></h2>
-  <p>Rôle : <span id="userRole"></span></p>
-  <p id="userClassContainer">Classe : <span id="userClass"></span></p>
-  <button onclick="logout()">Se déconnecter</button>
-</div>
+    <!-- Dashboard Élève -->
+    <div id="dashboardStudent">
+      <h2>Bienvenue, <span id="userNameStudent"></span></h2>
+      <p>Rôle : Élève</p>
+      <p>Classe : <span id="userClass"></span></p>
+      <button onclick="logout()">Se déconnecter</button>
+    </div>
 
-<script>
-  // ----- Gestion classes -----
-  function loadClasses() {
-    let classes = localStorage.getItem('classes');
-    if (!classes) {
-      // Valeurs par défaut
-      classes = [
-        { id: '1A', name: 'Classe 1A' },
-        { id: '2B', name: 'Classe 2B' },
-        { id: '3C', name: 'Classe 3C' }
-      ];
+    <!-- Dashboard Professeur -->
+    <div id="dashboardProfessor">
+      <h2>Bienvenue, <span id="userNameProf"></span></h2>
+      <p>Rôle : Professeur</p>
+
+      <!-- Liste classes existantes -->
+      <div>
+        <h3>Classes créées :</h3>
+        <ul id="classList"></ul>
+      </div>
+
+      <!-- Formulaire création classe -->
+      <div style="margin-top: 20px;">
+        <h3>Créer une nouvelle classe</h3>
+        <form id="classForm" onsubmit="createClass(event)">
+          <input type="text" id="newClassName" placeholder="Nom de la classe (ex: 4A)" required />
+          <button type="submit">Créer la classe</button>
+          <p id="classError" class="error"></p>
+          <p id="classSuccess" class="success"></p>
+        </form>
+      </div>
+
+      <button style="margin-top: 20px;" onclick="logout()">Se déconnecter</button>
+    </div>
+
+  </div>
+
+  <script>
+    // --- Gestion classes ---
+    function loadClasses() {
+      let classes = localStorage.getItem('classes');
+      if (!classes) {
+        classes = [
+          { id: '1A', name: 'Classe 1A' },
+          { id: '2B', name: 'Classe 2B' },
+          { id: '3C', name: 'Classe 3C' }
+        ];
+        localStorage.setItem('classes', JSON.stringify(classes));
+      } else {
+        classes = JSON.parse(classes);
+      }
+      return classes;
+    }
+
+    function saveClasses(classes) {
       localStorage.setItem('classes', JSON.stringify(classes));
-    } else {
-      classes = JSON.parse(classes);
-    }
-    return classes;
-  }
-
-  // Remplit la liste déroulante dans inscription
-  function renderSignupClassOptions() {
-    const select = document.getElementById('signupClass');
-    const classes = loadClasses();
-    // Effacer options précédentes (sauf placeholder)
-    select.innerHTML = '<option value="">-- Choisir une classe --</option>';
-    classes.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.id;
-      opt.textContent = c.name;
-      select.appendChild(opt);
-    });
-  }
-
-  // ----- Gestion utilisateurs -----
-  function loadUsers() {
-    let users = localStorage.getItem('users');
-    if (!users) {
-      users = [];
-      localStorage.setItem('users', JSON.stringify(users));
-    } else {
-      users = JSON.parse(users);
-    }
-    return users;
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-  }
-
-  // ----- Gestion connexion -----
-  function handleLogin(event) {
-    event.preventDefault();
-    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-    const password = document.getElementById('loginPassword').value;
-    const errorP = document.getElementById('loginError');
-    errorP.textContent = '';
-
-    const users = loadUsers();
-    const user = users.find(u => u.email.toLowerCase() === email);
-
-    if (!user) {
-      errorP.textContent = 'Utilisateur non trouvé.';
-      return;
-    }
-    if (user.password !== password) {
-      errorP.textContent = 'Mot de passe incorrect.';
-      return;
     }
 
-    // Connexion réussie : stocker user connecté en session (localStorage simple)
-    localStorage.setItem('loggedInUser', JSON.stringify(user));
-    showDashboard(user);
-  }
-
-  // ----- Gestion inscription élève -----
-  function handleSignup(event) {
-    event.preventDefault();
-
-    const email = document.getElementById('signupEmail').value.trim().toLowerCase();
-    const password = document.getElementById('signupPassword').value;
-    const confirmPassword = document.getElementById('signupConfirmPassword').value;
-    const classId = document.getElementById('signupClass').value;
-    const errorP = document.getElementById('signupError');
-    const successP = document.getElementById('signupSuccess');
-    errorP.textContent = '';
-    successP.textContent = '';
-
-    if (password !== confirmPassword) {
-      errorP.textContent = 'Les mots de passe ne correspondent pas.';
-      return;
-    }
-    if (!classId) {
-      errorP.textContent = 'Veuillez choisir une classe.';
-      return;
-    }
-
-    const classes = loadClasses();
-    if (!classes.find(c => c.id === classId)) {
-      errorP.textContent = 'Classe invalide.';
-      return;
-    }
-
-    const users = loadUsers();
-    if (users.find(u => u.email === email)) {
-      errorP.textContent = 'Cet email est déjà utilisé.';
-      return;
-    }
-
-    // Ajouter utilisateur élève
-    users.push({
-      email,
-      password,
-      role: 'student',
-      classId
-    });
-    saveUsers(users);
-
-    successP.textContent = 'Compte créé avec succès, vous pouvez maintenant vous connecter.';
-    document.getElementById('signupForm').reset();
-
-    setTimeout(() => {
-      successP.textContent = '';
-      showLogin();
-    }, 2000);
-  }
-
-  // ----- Affichage dashboard -----
-  function showDashboard(user) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('signupScreen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-
-    document.getElementById('userName').textContent = user.email;
-    document.getElementById('userRole').textContent = user.role === 'student' ? 'Élève' : 'Professeur';
-
-    if (user.role === 'student') {
-      document.getElementById('userClassContainer').style.display = 'block';
+    // Afficher les classes dans le dashboard prof
+    function renderClassList() {
+      const list = document.getElementById('classList');
       const classes = loadClasses();
-      const c = classes.find(cl => cl.id === user.classId);
-      document.getElementById('userClass').textContent = c ? c.name : user.classId;
-    } else {
-      document.getElementById('userClassContainer').style.display = 'none';
+      list.innerHTML = '';
+      if(classes.length === 0){
+        list.innerHTML = '<li>Aucune classe créée.</li>';
+        return;
+      }
+      classes.forEach(c => {
+        const li = document.createElement('li');
+        li.textContent = c.name + ' (ID: ' + c.id + ')';
+        list.appendChild(li);
+      });
     }
-  }
 
-  // ----- Affichage formulaire inscription -----
-  function showSignup() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('signupScreen').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
-    renderSignupClassOptions();
-  }
+    // --- Gestion utilisateurs ---
+    function loadUsers() {
+      let users = localStorage.getItem('users');
+      if (!users) {
+        // Créons un compte prof par défaut
+        users = [{
+          email: 'prof@mathlearn.com',
+          password: 'admin123',
+          role: 'professor'
+        }];
+        localStorage.setItem('users', JSON.stringify(users));
+      } else {
+        users = JSON.parse(users);
+      }
+      return users;
+    }
 
-  // ----- Affichage formulaire connexion -----
-  function showLogin() {
-    document.getElementById('loginScreen').style.display = 'block';
-    document.getElementById('signupScreen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'none';
-  }
+    function saveUsers(users) {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
 
-  // ----- Déconnexion -----
-  function logout() {
-    localStorage.removeItem('loggedInUser');
-    showLogin();
-  }
+    // --- Connexion ---
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+      const errorP = document.getElementById('loginError');
+      errorP.textContent = '';
 
-  // ----- Au chargement de la page -----
-  window.onload = () => {
-    renderSignupClassOptions();
+      const users = loadUsers();
+      const user = users.find(u => u.email.toLowerCase() === email);
 
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    if (loggedInUser) {
-      showDashboard(JSON.parse(loggedInUser));
-    } else {
+      if (!user) {
+        errorP.textContent = 'Utilisateur non trouvé.';
+        return;
+      }
+      if (user.password !== password) {
+        errorP.textContent = 'Mot de passe incorrect.';
+        return;
+      }
+
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      showDashboard(user);
+    }
+
+    // --- Inscription élève ---
+    function handleSignup(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+      const classId = document.getElementById('signupClass').value;
+      const errorP = document.getElementById('signupError');
+      const successP = document.getElementById('signupSuccess');
+      errorP.textContent = '';
+      successP.textContent = '';
+
+      if (password !== confirmPassword) {
+        errorP.textContent = 'Les mots de passe ne correspondent pas.';
+        return;
+      }
+      if (!classId) {
+        errorP.textContent = 'Veuillez choisir une classe.';
+        return;
+      }
+
+      const classes = loadClasses();
+      if (!classes.find(c => c.id === classId)) {
+        errorP.textContent = 'Classe invalide.';
+        return;
+      }
+
+      const users = loadUsers();
+      if (users.find(u => u.email === email)) {
+        errorP.textContent = 'Cet email est déjà utilisé.';
+        return;
+      }
+
+      // Ajouter élève
+      users.push({
+        email,
+        password,
+        role: 'student',
+        classId
+      });
+      saveUsers(users);
+
+      successP.textContent = 'Compte créé avec succès, vous pouvez maintenant vous connecter.';
+      document.getElementById('signupForm').reset();
+
+      setTimeout(() => {
+        successP.textContent = '';
+        showLogin();
+      }, 2000);
+    }
+
+    // --- Affichage dashboard ---
+    function showDashboard(user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('signupScreen').style.display = 'none';
+
+      if(user.role === 'professor'){
+        document.getElementById('dashboardProfessor').style.display = 'block';
+        document.getElementById('dashboardStudent').style.display = 'none';
+        document.getElementById('userNameProf').textContent = user.email;
+        renderClassList();
+      } else {
+        document.getElementById('dashboardStudent').style.display = 'block';
+        document.getElementById('dashboardProfessor').style.display = 'none';
+        document.getElementById('userNameStudent').textContent = user.email;
+        const classes = loadClasses();
+        const c = classes.find(cl => cl.id === user.classId);
+        document.getElementById('userClass').textContent = c ? c.name : user.classId;
+      }
+    }
+
+    // --- Affichage formulaire inscription ---
+    function showSignup() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('signupScreen').style.display = 'block';
+      document.getElementById('dashboardStudent').style.display = 'none';
+      document.getElementById('dashboardProfessor').style.display = 'none';
+      renderSignupClassOptions();
+    }
+
+    // --- Affichage formulaire connexion ---
+    function showLogin() {
+      document.getElementById('loginScreen').style.display = 'block';
+      document.getElementById('signupScreen').style.display = 'none';
+      document.getElementById('dashboardStudent').style.display = 'none';
+      document.getElementById('dashboardProfessor').style.display = 'none';
+    }
+
+    // --- Déconnexion ---
+    function logout() {
+      localStorage.removeItem('loggedInUser');
       showLogin();
     }
-  };
-</script>
+
+    // --- Remplir la liste déroulante classes inscription ---
+    function renderSignupClassOptions() {
+      const select = document.getElementById('signupClass');
+      const classes = loadClasses();
+      select.innerHTML = '<option value="">-- Choisir une classe --</option>';
+      classes.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        select.appendChild(opt);
+      });
+    }
+
+    // --- Création nouvelle classe (prof) ---
+    function createClass(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('newClassName');
+      const name = nameInput.value.trim();
+      const errorP = document.getElementById('classError');
+      const successP = document.getElementById('classSuccess');
+      errorP.textContent = '';
+      successP.textContent = '';
+
+      if(!name){
+        errorP.textContent = 'Veuillez saisir un nom de classe.';
+        return;
+      }
+
+      // Générer un ID simple à partir du nom (ex: "4A" → "4A")
+      const id = name.toUpperCase();
+
+      let classes = loadClasses();
+      if(classes.find(c => c.id === id || c.name.toLowerCase() === name.toLowerCase())){
+        errorP.textContent = 'Cette classe existe déjà.';
+        return;
+      }
+
+      classes.push({ id, name });
+      saveClasses(classes);
+      renderClassList();
+      renderSignupClassOptions();
+
+      successP.textContent = 'Classe créée avec succès.';
+      nameInput.value = '';
+    }
+
+    // --- Initialisation page ---
+    window.onload = () => {
+      renderSignupClassOptions();
+
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      if(loggedInUser){
+        showDashboard(JSON.parse(loggedInUser));
+      } else {
+        showLogin();
+      }
+    };
+  </script>
 
 </body>
 </html>
