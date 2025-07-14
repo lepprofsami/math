@@ -404,4 +404,565 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 100
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .student-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .student-password {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+            margin-left: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #48bb78;
+        }
+
+        .notification.error {
+            background: #f56565;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .status-submitted {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-graded {
+            background: #bee3f8;
+            color: #2a69ac;
+        }
+
+        .math-editor {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+        }
+
+        .demo-credentials {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-credentials h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .demo-credentials p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .demo-credentials strong {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .class-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧮 MathLearn</h1>
+            <p style="text-align: center; color: #666; margin-top: 10px;">
+                Plateforme d'apprentissage mathématiques collaborative
+            </p>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-container">
+            <h2 style="text-align: center; margin-bottom: 30px;">Connexion</h2>
+            
+            <div class="user-type-selector">
+                <div class="user-type-btn active" onclick="setUserType('professor', event)">
+                    👨‍🏫 Professeur
+                </div>
+                <div class="user-type-btn" onclick="setUserType('student', event)">
+                    👨‍🎓 Étudiant
+                </div>
+            </div>
+
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+
+            <div class="demo-credentials">
+                <h4>🔑 Comptes de démonstration</h4>
+                <p><strong>Professeur :</strong> prof@mathlearn.com | admin123</p>
+                <p><strong>Étudiant :</strong> Utilisez l'email et le mot de passe fournis par votre professeur</p>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <!-- Exemple simplifié de contenu de tableau de bord -->
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">P</div>
+                    <div>
+                        <div id="userEmail">prof@mathlearn.com</div>
+                        <div id="userRole">Professeur</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
+            </div>
+
+            <div class="main-content">
+                <div class="left-panel">
+                    <section class="classes-section">
+                        <h2 class="section-title">Mes Classes</h2>
+                        <div class="class-grid" id="classGrid">
+                            <!-- Cartes des classes insérées ici dynamiquement -->
+                        </div>
+                        <button class="btn btn-primary" onclick="openModal('createClassModal')">➕ Créer une classe</button>
+                    </section>
+
+                    <section class="assignments-section">
+                        <h2 class="section-title">Mes Devoirs</h2>
+                        <div id="assignmentsList">
+                            <!-- Liste des devoirs -->
+                        </div>
+                        <button class="btn btn-primary" onclick="openModal('assignmentModal')">➕ Créer un devoir</button>
+                    </section>
+                </div>
+
+                <div class="chat-panel">
+                    <div class="chat-header">
+                        <h3>💬 Chat de la classe</h3>
+                    </div>
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Tapez votre message..." />
+                        <button class="send-btn" onclick="sendMessage()">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal pour créer des devoirs -->
+        <div id="assignmentModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal('assignmentModal')">&times;</span>
+                <h3>📝 Créer un Nouveau Devoir</h3>
+                <div class="form-group">
+                    <label>Titre du devoir:</label>
+                    <input type="text" id="assignmentTitle" placeholder="ex: Équations du second degré" />
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="assignmentDescription" placeholder="Instructions et description du devoir..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Contenu mathématique:</label>
+                    <div class="math-editor" id="mathEditor" contenteditable="true">
+                        Tapez ici vos formules mathématiques...
+                        <br />Exemple: f(x) = ax² + bx + c
+                        <br />Δ = b² - 4ac
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Date d'échéance:</label>
+                    <input type="datetime-local" id="assignmentDueDate" />
+                </div>
+                <div class="form-group">
+                    <label>Classe:</label>
+                    <select id="assignmentClass">
+                        <option value="">Sélectionner une classe</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="createAssignment()">
+                    ✅ Créer le Devoir
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal pour créer une classe -->
+        <div id="createClassModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal('createClassModal')">&times;</span>
+                <h3>➕ Créer une nouvelle classe</h3>
+                <div class="form-group">
+                    <label>Nom de la classe:</label>
+                    <input type="text" id="newClassName" placeholder="ex: Terminale S3" />
+                </div>
+                <button class="btn btn-primary" onclick="createClass()">
+                    Créer la classe
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==== JavaScript Intégré ====
+
+        // Données temporaires pour démo (remplacer par une vraie API/backend)
+        let currentUser = null;
+        let currentUserType = 'professor'; // ou 'student'
+        let classes = [];
+        let assignments = [];
+        let chatMessages = [];
+
+        function setUserType(type, event) {
+            currentUserType = type;
+            document.querySelectorAll('.user-type-btn').forEach(btn => btn.classList.remove('active'));
+            if(event) event.currentTarget.classList.add('active');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Validation basique (demo)
+            if(currentUserType === 'professor') {
+                if(email === 'prof@mathlearn.com' && password === 'admin123') {
+                    currentUser = {email, role: 'Professeur'};
+                    showDashboard();
+                    notify('Connexion réussie', 'success');
+                } else {
+                    notify('Email ou mot de passe incorrect', 'error');
+                }
+            } else {
+                // Pour l'étudiant, on simule juste la connexion
+                if(email && password) {
+                    currentUser = {email, role: 'Étudiant'};
+                    showDashboard();
+                    notify('Connexion réussie', 'success');
+                } else {
+                    notify('Veuillez remplir tous les champs', 'error');
+                }
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            const dash = document.getElementById('dashboard');
+            dash.style.display = 'block';
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userRole').textContent = currentUser.role;
+            document.getElementById('userAvatar').textContent = currentUser.role[0];
+            loadClasses();
+            loadAssignments();
+            loadChat();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'block';
+            clearInputs();
+        }
+
+        function clearInputs() {
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function notify(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.classList.add('notification', type, 'show');
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if(id === 'assignmentModal') {
+                fillAssignmentClassOptions();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            if(id === 'assignmentModal') {
+                clearAssignmentForm();
+            }
+            if(id === 'createClassModal') {
+                document.getElementById('newClassName').value = '';
+            }
+        }
+
+        // Gestion des classes
+        function loadClasses() {
+            const container = document.getElementById('classGrid');
+            container.innerHTML = '';
+            if(classes.length === 0) {
+                container.innerHTML = '<p>Aucune classe créée pour le moment.</p>';
+                return;
+            }
+            classes.forEach((cls, idx) => {
+                const div = document.createElement('div');
+                div.className = 'class-card';
+                div.innerHTML = `
+                    <div class="class-info">
+                        <div class="class-name">${cls.name}</div>
+                        <div class="class-details">Nombre d'étudiants: ${cls.students.length}</div>
+                        <div class="class-stats">
+                            <span>Devoirs: ${cls.assignments.length}</span>
+                        </div>
+                        <div class="class-actions">
+                            <button onclick="deleteClass(${idx})">Supprimer</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function createClass() {
+            const name = document.getElementById('newClassName').value.trim();
+            if(name.length < 3) {
+                notify('Le nom de la classe doit contenir au moins 3 caractères', 'error');
+                return;
+            }
+            classes.push({name, students: [], assignments: []});
+            loadClasses();
+            closeModal('createClassModal');
+            notify(`Classe "${name}" créée avec succès`, 'success');
+        }
+
+        function deleteClass(index) {
+            if(confirm(`Supprimer la classe "${classes[index].name}" ? Cette action est irréversible.`)) {
+                classes.splice(index, 1);
+                loadClasses();
+                notify('Classe supprimée', 'success');
+            }
+        }
+
+        // Gestion des devoirs
+        function fillAssignmentClassOptions() {
+            const select = document.getElementById('assignmentClass');
+            select.innerHTML = '<option value="">Sélectionner une classe</option>';
+            classes.forEach((cls, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = cls.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function createAssignment() {
+            const title = document.getElementById('assignmentTitle').value.trim();
+            const description = document.getElementById('assignmentDescription').value.trim();
+            const content = document.getElementById('mathEditor').innerText.trim();
+            const dueDate = document.getElementById('assignmentDueDate').value;
+            const classIndex = document.getElementById('assignmentClass').value;
+
+            if(!title || !description || !content || !dueDate || classIndex === '') {
+                notify('Veuillez remplir tous les champs du devoir', 'error');
+                return;
+            }
+
+            const assignment = {
+                title,
+                description,
+                content,
+                dueDate,
+                classIndex: parseInt(classIndex, 10),
+                createdAt: new Date().toISOString(),
+            };
+
+            assignments.push(assignment);
+            classes[assignment.classIndex].assignments.push(assignment);
+            loadAssignments();
+            closeModal('assignmentModal');
+            notify(`Devoir "${title}" créé avec succès`, 'success');
+        }
+
+        function clearAssignmentForm() {
+            document.getElementById('assignmentTitle').value = '';
+            document.getElementById('assignmentDescription').value = '';
+            document.getElementById('mathEditor').innerHTML = 'Tapez ici vos formules mathématiques...<br>Exemple: f(x) = ax² + bx + c<br>Δ = b² - 4ac';
+            document.getElementById('assignmentDueDate').value = '';
+            document.getElementById('assignmentClass').value = '';
+        }
+
+        function loadAssignments() {
+            const container = document.getElementById('assignmentsList');
+            container.innerHTML = '';
+            if(assignments.length === 0) {
+                container.innerHTML = '<p>Aucun devoir créé pour le moment.</p>';
+                return;
+            }
+
+            assignments.forEach((a, idx) => {
+                const div = document.createElement('div');
+                div.className = 'assignment-item';
+                div.innerHTML = `
+                    <div class="assignment-title">${a.title}</div>
+                    <div>${a.description}</div>
+                    <div style="font-size: 0.8em; color: #999; margin-top: 5px;">Échéance : ${new Date(a.dueDate).toLocaleString()}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Chat (simple démo)
+        function loadChat() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            if(chatMessages.length === 0) {
+                container.innerHTML = '<p>Aucun message pour le moment.</p>';
+                return;
+            }
+            chatMessages.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'message';
+                div.innerHTML = `
+                    <div class="message-author">${m.author}</div>
+                    <div class="message-text">${m.text}</div>
+                    <div class="message-time">${new Date(m.time).toLocaleTimeString()}</div>
+                `;
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if(!text) return;
+            const message = {
+                author: currentUser.email,
+                text,
+                time: new Date().toISOString()
+            };
+            chatMessages.push(message);
+            loadChat();
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
