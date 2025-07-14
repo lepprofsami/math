@@ -809,6 +809,9 @@
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
 
+            console.log('Tentative de connexion:', { email, password, currentUserType });
+            console.log('Utilisateurs dans la base:', database.users);
+
             // Trouver l'utilisateur
             const user = database.users.find(u => u.email === email && u.password === password);
             
@@ -858,54 +861,156 @@
             showNotification('Déconnexion réussie !', 'success');
         }
 
-        // Créer une classe
-        function createClass() {
-            const name = document.getElementById('className').value.trim();
-            const description = document.getElementById('classDescription').value.trim();
-            const level = document.getElementById('classLevel').value;
-
-            if (!name || !description || !level) {
-                showNotification('Veuillez remplir tous les champs', 'error');
-                return;
-            }
-
-            const newClass = {
-                id: Date.now(),
-                name: name,
-                description: description,
-                level: level,
-                teacherId: currentUser.id,
-                students: [],
-                createdAt: new Date().toISOString()
-            };
-
-            database.classes.push(newClass);
-            
-            // Vider les champs
-            document.getElementById('className').value = '';
-            document.getElementById('classDescription').value = '';
-            document.getElementById('classLevel').value = '';
-
-            // Recharger les données
+        // Charger le tableau de bord
+        function loadDashboard() {
             loadClasses();
+            loadAssignments();
             loadChatClasses();
             loadManageClassOptions();
-            
-            showNotification('Classe créée avec succès !', 'success');
         }
 
-        // Ajouter un étudiant
-        function addStudent() {
-            const classId = parseInt(document.getElementById('manageClassSelect').value);
-            const studentName = document.getElementById('studentName').value.trim();
-            const studentEmail = document.getElementById('studentEmail').value.trim();
+        // Charger les classes
+        function loadClasses() {
+            const classGrid = document.getElementById('classGrid');
+            let classes = [];
+            
+            if (currentUser.role === 'professor') {
+                classes = database.classes.filter(c => c.teacherId === currentUser.id);
+            } else {
+                classes = database.classes.filter(c => c.students.includes(currentUser.id));
+            }
 
-            if (!classId || !studentName || !studentEmail) {
-                showNotification('Veuillez remplir tous les champs', 'error');
+            if (classes.length === 0) {
+                classGrid.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Aucune classe trouvée</div>';
                 return;
             }
 
-            // Vérifier si l'email existe déjà
-            const existingUser = database.users.find(u => u.email === studentEmail);
-            if (existingUser) {
-                showNotification('Cet email est
+            classGrid.innerHTML = classes.map(cls => `
+                <div class="class-card">
+                    <div class="class-info">
+                        <div class="class-name">${cls.name}</div>
+                        <div class="class-details">${cls.description}</div>
+                        <div class="class-details">Niveau: ${cls.level}</div>
+                        <div class="class-stats">
+                            <span>👥 ${cls.students.length} étudiants</span>
+                            <span>📅 ${new Date(cls.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        ${currentUser.role === 'professor' ? `
+                            <div class="class-actions">
+                                <button onclick="createAssignmentForClass(${cls.id})">
+                                <script>
+                                ➕ Devoir
+                        </button>
+                    </div>` : ''}
+                </div>
+            </div>
+        `).join('');
+        }
+</script>
+    function createAssignmentForClass(classId) {
+        document.getElementById('assignmentClass').value = classId;
+        openModal('assignmentModal');
+    }
+
+    function createClass() {
+        const name = document.getElementById('className').value.trim();
+        const description = document.getElementById('classDescription').value.trim();
+        const level = document.getElementById('classLevel').value;
+
+        if (!name || !description || !level) {
+            showNotification("Veuillez remplir tous les champs", "error");
+            return;
+        }
+
+        const newClass = {
+            id: Date.now(),
+            name,
+            description,
+            level,
+            teacherId: currentUser.id,
+            students: [],
+            createdAt: new Date().toISOString()
+        };
+
+        database.classes.push(newClass);
+        document.getElementById('className').value = '';
+        document.getElementById('classDescription').value = '';
+        document.getElementById('classLevel').value = '';
+
+        loadClasses();
+        loadManageClassOptions();
+        showNotification("Classe créée avec succès", "success");
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    function showNotification(message, type) {
+        const notif = document.createElement('div');
+        notif.className = `notification ${type} show`;
+        notif.innerText = message;
+        document.body.appendChild(notif);
+        setTimeout(() => {
+            notif.remove();
+        }, 3000);
+    }
+</script>
+                                <script>
+    function createAssignmentForClass(classId) {
+        document.getElementById('assignmentClass').value = classId;
+        openModal('assignmentModal');
+    }
+
+    function createClass() {
+        const name = document.getElementById('className').value.trim();
+        const description = document.getElementById('classDescription').value.trim();
+        const level = document.getElementById('classLevel').value;
+
+        if (!name || !description || !level) {
+            showNotification("Veuillez remplir tous les champs", "error");
+            return;
+        }
+
+        const newClass = {
+            id: Date.now(),
+            name,
+            description,
+            level,
+            teacherId: currentUser.id,
+            students: [],
+            createdAt: new Date().toISOString()
+        };
+
+        database.classes.push(newClass);
+        document.getElementById('className').value = '';
+        document.getElementById('classDescription').value = '';
+        document.getElementById('classLevel').value = '';
+
+        loadClasses();
+        loadManageClassOptions();
+        showNotification("Classe créée avec succès", "success");
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    function showNotification(message, type) {
+        const notif = document.createElement('div');
+        notif.className = `notification ${type} show`;
+        notif.innerText = message;
+        document.body.appendChild(notif);
+        setTimeout(() => {
+            notif.remove();
+        }, 3000);
+    }
+</script>
