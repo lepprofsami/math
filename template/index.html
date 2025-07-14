@@ -44,16 +44,41 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 30px;
-            text-align: center;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .login-buttons {
+        .login-form {
             display: flex;
+            flex-direction: column;
             gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .btn {
@@ -78,9 +103,38 @@
             color: white;
         }
 
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 15px;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .user-type-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
         }
 
         .dashboard {
@@ -134,7 +188,7 @@
             gap: 20px;
         }
 
-        .classes-section, .assignments-section, .create-class-section {
+        .classes-section, .assignments-section, .create-class-section, .manage-students-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 15px;
@@ -210,6 +264,27 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.9em;
+        }
+
+        .class-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .class-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .class-actions button:hover {
+            background: rgba(255,255,255,0.2);
         }
 
         .assignment-item {
@@ -320,32 +395,6 @@
             transform: scale(1.05);
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -388,31 +437,53 @@
             color: #333;
         }
 
-        .online-users {
-            background: #f0f4f8;
-            padding: 15px;
+        .student-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
             border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 15px;
+            margin-top: 15px;
         }
 
-        .online-users h4 {
-            margin-bottom: 10px;
-            color: #4a5568;
-        }
-
-        .user-list {
+        .student-item {
             display: flex;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .user-badge {
-            background: #667eea;
+        .student-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .student-password {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+            margin-left: 10px;
         }
 
         .notification {
@@ -440,42 +511,6 @@
             background: #f56565;
         }
 
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .class-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .login-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        .math-editor {
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 100px;
-            font-family: 'Courier New', monospace;
-            background: #f8f9fa;
-        }
-
-        .assignment-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 15px;
-        }
-
         .status-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -498,10 +533,46 @@
             color: #2a69ac;
         }
 
-        .grade-display {
-            font-weight: bold;
-            color: #667eea;
-            margin-left: 10px;
+        .math-editor {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+        }
+
+        .demo-credentials {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-credentials h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .demo-credentials p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .demo-credentials strong {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .class-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -517,15 +588,33 @@
 
         <!-- Login Screen -->
         <div id="loginScreen" class="login-container">
-            <h2>Connexion à la plateforme</h2>
-            <p>Choisissez votre type de compte pour accéder à la plateforme</p>
-            <div class="login-buttons">
-                <button class="btn btn-primary" onclick="login('professor')">
+            <h2 style="text-align: center; margin-bottom: 30px;">Connexion</h2>
+            
+            <div class="user-type-selector">
+                <div class="user-type-btn active" onclick="setUserType('professor')">
                     👨‍🏫 Professeur
-                </button>
-                <button class="btn btn-secondary" onclick="login('student')">
+                </div>
+                <div class="user-type-btn" onclick="setUserType('student')">
                     👨‍🎓 Étudiant
-                </button>
+                </div>
+            </div>
+
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+
+            <div class="demo-credentials">
+                <h4>🔑 Comptes de démonstration</h4>
+                <p><strong>Professeur :</strong> prof@mathlearn.com | admin123</p>
+                <p><strong>Étudiant :</strong> Utilisez l'email et le mot de passe fournis par votre professeur</p>
             </div>
         </div>
 
@@ -535,8 +624,8 @@
                 <div class="user-info">
                     <div class="avatar" id="userAvatar">P</div>
                     <div>
-                        <h3 id="userName">Professeur Martin</h3>
-                        <p id="userRole">Professeur de Mathématiques</p>
+                        <h3 id="userName">Utilisateur</h3>
+                        <p id="userEmail">email@example.com</p>
                     </div>
                 </div>
                 <button class="btn btn-secondary" onclick="logout()">
@@ -575,6 +664,33 @@
                         </button>
                     </div>
 
+                    <!-- Section Gestion des Étudiants (Professeur seulement) -->
+                    <div id="manageStudentsSection" class="manage-students-section">
+                        <h3 class="section-title">👥 Gestion des Étudiants</h3>
+                        <div class="form-group">
+                            <label>Sélectionner une classe:</label>
+                            <select id="manageClassSelect" onchange="loadStudentsForClass()">
+                                <option value="">Choisir une classe</option>
+                            </select>
+                        </div>
+                        <div id="studentsManagement" style="display: none;">
+                            <div class="form-group">
+                                <label>Nom de l'étudiant:</label>
+                                <input type="text" id="studentName" placeholder="Nom complet de l'étudiant">
+                            </div>
+                            <div class="form-group">
+                                <label>Email de l'étudiant:</label>
+                                <input type="email" id="studentEmail" placeholder="email@example.com">
+                            </div>
+                            <button class="btn btn-primary" onclick="addStudent()">
+                                ➕ Ajouter l'étudiant
+                            </button>
+                            <div id="studentsList" class="student-list">
+                                <!-- Students will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Section Classes -->
                     <div class="classes-section">
                         <h3 class="section-title">📖 Mes Classes</h3>
@@ -600,31 +716,10 @@
                             <option value="">Sélectionner une classe</option>
                         </select>
                     </div>
-                    
-                    <div class="online-users">
-                        <h4>👥 Utilisateurs en ligne</h4>
-                        <div class="user-list" id="onlineUsers">
-                            <div class="user-badge">Prof. Martin</div>
-                            <div class="user-badge">Alice D.</div>
-                            <div class="user-badge">Bob L.</div>
-                        </div>
-                    </div>
 
                     <div class="chat-messages" id="chatMessages">
-                        <div class="message">
-                            <div class="message-author">Prof. Martin</div>
-                            <div class="message-time">14:30</div>
-                            <div>Bonjour tout le monde ! N'oubliez pas le devoir sur les équations pour demain.</div>
-                        </div>
-                        <div class="message">
-                            <div class="message-author">Alice D.</div>
-                            <div class="message-time">14:32</div>
-                            <div>Merci professeur ! J'ai une question sur l'exercice 3.</div>
-                        </div>
-                        <div class="message">
-                            <div class="message-author">Bob L.</div>
-                            <div class="message-time">14:33</div>
-                            <div>Moi aussi ! Pouvez-vous nous expliquer la méthode ?</div>
+                        <div style="text-align: center; padding: 20px; color: #666;">
+                            Sélectionnez une classe pour voir les messages
                         </div>
                     </div>
 
@@ -674,116 +769,77 @@
                 </button>
             </div>
         </div>
-
-        <!-- Modal pour rejoindre une classe -->
-        <div id="joinClassModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeModal('joinClassModal')">&times;</span>
-                <h3>🎯 Rejoindre une Classe</h3>
-                <div class="form-group">
-                    <label>Code de la classe:</label>
-                    <input type="text" id="classCode" placeholder="ex: MATH3A2024">
-                </div>
-                <button class="btn btn-primary" onclick="joinClass()">
-                    ➕ Rejoindre
-                </button>
-            </div>
-        </div>
     </div>
 
     <script>
-        // Simulation de base de données en mémoire
+        // Base de données simulée
         let database = {
             users: [
-                { id: 1, name: 'Prof. Martin', role: 'professor', email: 'martin@school.com' },
-                { id: 2, name: 'Alice Dupont', role: 'student', email: 'alice@school.com' },
-                { id: 3, name: 'Bob Lambert', role: 'student', email: 'bob@school.com' },
-                { id: 4, name: 'Claire Moreau', role: 'student', email: 'claire@school.com' }
+                { id: 1, name: 'Prof. Martin', email: 'prof@mathlearn.com', password: 'admin123', role: 'professor' }
             ],
-            classes: [
-                { 
-                    id: 1, 
-                    name: 'Mathématiques 3ème A', 
-                    description: 'Classe de mathématiques niveau 3ème',
-                    level: '3ème',
-                    teacher: 'Prof. Martin',
-                    teacherId: 1,
-                    students: [2, 3, 4],
-                    code: 'MATH3A2024',
-                    createdAt: '2024-09-01'
-                },
-                { 
-                    id: 2, 
-                    name: 'Algèbre 2nde B', 
-                    description: 'Cours d\'algèbre pour seconde',
-                    level: '2nde',
-                    teacher: 'Prof. Martin',
-                    teacherId: 1,
-                    students: [2, 3],
-                    code: 'ALG2B2024',
-                    createdAt: '2024-09-01'
-                }
-            ],
-            assignments: [
-                {
-                    id: 1,
-                    title: 'Équations du second degré',
-                    description: 'Résoudre les équations données en utilisant la formule quadratique',
-                    content: 'Résoudre: x² - 5x + 6 = 0\nDéterminer le discriminant Δ = b² - 4ac',
-                    dueDate: '2024-12-20T23:59',
-                    classId: 1,
-                    className: 'Mathématiques 3ème A',
-                    teacherId: 1,
-                    status: 'active',
-                    submissions: [
-                        { studentId: 2, submittedAt: '2024-12-18T14:30', grade: 18, status: 'graded' },
-                        { studentId: 3, submittedAt: '2024-12-19T10:15', grade: null, status: 'submitted' },
-                        { studentId: 4, submittedAt: null, grade: null, status: 'pending' }
-                    ]
-                },
-                {
-                    id: 2,
-                    title: 'Fonctions linéaires',
-                    description: 'Étudier les propriétés des fonctions linéaires',
-                    content: 'Soit f(x) = 2x + 3\n1. Calculer f(0), f(1), f(-2)\n2. Tracer la courbe représentative',
-                    dueDate: '2024-12-25T23:59',
-                    classId: 1,
-                    className: 'Mathématiques 3ème A',
-                    teacherId: 1,
-                    status: 'active',
-                    submissions: [
-                        { studentId: 2, submittedAt: null, grade: null, status: 'pending' },
-                        { studentId: 3, submittedAt: null, grade: null, status: 'pending' },
-                        { studentId: 4, submittedAt: null, grade: null, status: 'pending' }
-                    ]
-                }
-            ],
-            messages: [
-                { id: 1, classId: 1, userId: 1, userName: 'Prof. Martin', message: 'Bonjour tout le monde ! N\'oubliez pas le devoir sur les équations pour demain.', timestamp: '2024-12-18T14:30:00' },
-                { id: 2, classId: 1, userId: 2, userName: 'Alice D.', message: 'Merci professeur ! J\'ai une question sur l\'exercice 3.', timestamp: '2024-12-18T14:32:00' },
-                { id: 3, classId: 1, userId: 3, userName: 'Bob L.', message: 'Moi aussi ! Pouvez-vous nous expliquer la méthode ?', timestamp: '2024-12-18T14:33:00' }
-            ]
+            classes: [],
+            assignments: [],
+            messages: []
         };
 
         let currentUser = null;
+        let currentUserType = 'professor';
         let currentChatClass = null;
 
-        // Fonction de connexion
-        function login(role) {
-            if (role === 'professor') {
-                currentUser = database.users.find(u => u.role === 'professor');
-                document.getElementById('userAvatar').textContent = 'P';
-                document.getElementById('userName').textContent = currentUser.name;
-                document.getElementById('userRole').textContent = 'Professeur de Mathématiques';
-                document.getElementById('createClassSection').style.display = 'block';
-            } else {
-                currentUser = database.users.find(u => u.role === 'student');
-                document.getElementById('userAvatar').textContent = 'E';
-                document.getElementById('userName').textContent = currentUser.name;
-                document.getElementById('userRole').textContent = 'Étudiant';
-                document.getElementById('createClassSection').style.display = 'none';
+        // Fonction pour générer un mot de passe simple
+        function generateSimplePassword() {
+            const adjectives = ['rouge', 'bleu', 'vert', 'jaune', 'violet', 'orange', 'rose', 'noir'];
+            const numbers = Math.floor(Math.random() * 99) + 1;
+            const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+            return adjective + numbers;
+        }
+
+        // Définir le type d'utilisateur
+        function setUserType(type) {
+            currentUserType = type;
+            document.querySelectorAll('.user-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Gérer la connexion
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Trouver l'utilisateur
+            const user = database.users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                showNotification('Email ou mot de passe incorrect', 'error');
+                return;
             }
 
+            if (user.role !== currentUserType) {
+                showNotification('Type de compte incorrect', 'error');
+                return;
+            }
+
+            // Connexion réussie
+            currentUser = user;
+            
+            // Mettre à jour l'interface
+            document.getElementById('userAvatar').textContent = user.role === 'professor' ? 'P' : user.name.charAt(0).toUpperCase();
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            
+            // Afficher/masquer les sections selon le rôle
+            if (user.role === 'professor') {
+                document.getElementById('createClassSection').style.display = 'block';
+                document.getElementById('manageStudentsSection').style.display = 'block';
+            } else {
+                document.getElementById('createClassSection').style.display = 'none';
+                document.getElementById('manageStudentsSection').style.display = 'none';
+            }
+
+            // Passer au tableau de bord
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').classList.add('active');
             
@@ -791,178 +847,21 @@
             showNotification('Connexion réussie !', 'success');
         }
 
-        // Fonction de déconnexion
+        // Déconnexion
         function logout() {
             currentUser = null;
             currentChatClass = null;
             document.getElementById('dashboard').classList.remove('active');
             document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
             showNotification('Déconnexion réussie !', 'success');
         }
 
-        // Charger le tableau de bord
-        function loadDashboard() {
-            loadClasses();
-            loadAssignments();
-            loadChatClasses();
-        }
-
-        // Charger les classes
-        function loadClasses() {
-            const classGrid = document.getElementById('classGrid');
-            classGrid.innerHTML = '';
-
-            let userClasses = [];
-            if (currentUser.role === 'professor') {
-                userClasses = database.classes.filter(c => c.teacherId === currentUser.id);
-            } else {
-                userClasses = database.classes.filter(c => c.students.includes(currentUser.id));
-            }
-
-            userClasses.forEach(classItem => {
-                const classCard = document.createElement('div');
-                classCard.className = 'class-card';
-                classCard.onclick = () => openClass(classItem.id);
-                
-                classCard.innerHTML = `
-                    <div class="class-info">
-                        <div class="class-name">${classItem.name}</div>
-                        <div class="class-details">
-                            <div>📚 ${classItem.level}</div>
-                            <div>👨‍🏫 ${classItem.teacher}</div>
-                        </div>
-                        <div class="class-stats">
-                            <span>👥 ${classItem.students.length} étudiants</span>
-                            <span>📝 Code: ${classItem.code}</span>
-                        </div>
-                    </div>
-                `;
-                classGrid.appendChild(classCard);
-            });
-
-            // Ajouter un bouton pour rejoindre une classe (étudiants)
-            if (currentUser.role === 'student') {
-                const joinCard = document.createElement('div');
-                joinCard.className = 'class-card';
-                joinCard.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
-                joinCard.onclick = () => openModal('joinClassModal');
-                
-                joinCard.innerHTML = `
-                    <div class="class-info">
-                        <div class="class-name">➕ Rejoindre une classe</div>
-                        <div class="class-details">
-                            <div>Entrez le code de classe fourni par votre professeur</div>
-                        </div>
-                    </div>
-                `;
-                classGrid.appendChild(joinCard);
-            }
-        }
-
-        // Charger les devoirs
-        function loadAssignments() {
-            const assignmentsList = document.getElementById('assignmentsList');
-            assignmentsList.innerHTML = '';
-
-            let userAssignments = [];
-            if (currentUser.role === 'professor') {
-                userAssignments = database.assignments.filter(a => a.teacherId === currentUser.id);
-            } else {
-                const userClassIds = database.classes.filter(c => c.students.includes(currentUser.id)).map(c => c.id);
-                userAssignments = database.assignments.filter(a => userClassIds.includes(a.classId));
-            }
-
-            userAssignments.forEach(assignment => {
-                const assignmentItem = document.createElement('div');
-                assignmentItem.className = 'assignment-item';
-                
-                let statusInfo = '';
-                let actions = '';
-                
-                if (currentUser.role === 'student') {
-                    const submission = assignment.submissions.find(s => s.studentId === currentUser.id);
-                    if (submission) {
-                        if (submission.status === 'graded') {
-                            statusInfo = `<span class="status-badge status-graded">Noté</span><span class="grade-display">${submission.grade}/20</span>`;
-                        } else if (submission.status === 'submitted') {
-                            statusInfo = `<span class="status-badge status-submitted">Rendu</span>`;
-                        }
-                    } else {
-                        statusInfo = `<span class="status-badge status-pending">En attente</span>`;
-                    }
-                    actions = `<button class="btn btn-primary btn-small" onclick="submitAssignment(${assignment.id})">📤 Rendre</button>`;
-                } else {
-                    const submittedCount = assignment.submissions.filter(s => s.status !== 'pending').length;
-                    const totalStudents = assignment.submissions.length;
-                    statusInfo = `<span>${submittedCount}/${totalStudents} rendus</span>`;
-                    actions = `
-                        <button class="btn btn-primary btn-small" onclick="viewSubmissions(${assignment.id})">👀 Voir rendus</button>
-                        <button class="btn btn-secondary btn-small" onclick="gradeAssignment(${assignment.id})">📊 Noter</button>
-                    `;
-                }
-                
-                const dueDate = new Date(assignment.dueDate).toLocaleString('fr-FR');
-                
-                assignmentItem.innerHTML = `
-                    <div class="assignment-title">${assignment.title}</div>
-                    <div class="assignment-meta">
-                        <span>📅 ${dueDate}</span>
-                        <span>📚 ${assignment.className}</span>
-                    </div>
-                    <div style="margin-top: 10px;">
-                        ${statusInfo}
-                    </div>
-                    <div class="assignment-actions">
-                        ${actions}
-                    </div>
-                `;
-                assignmentsList.appendChild(assignmentItem);
-            });
-
-            // Ajouter un bouton pour créer un devoir (professeurs)
-            if (currentUser.role === 'professor') {
-                const createButton = document.createElement('button');
-                createButton.className = 'btn btn-primary';
-                createButton.style.width = '100%';
-                createButton.style.marginTop = '20px';
-                createButton.onclick = () => openModal('assignmentModal');
-                createButton.innerHTML = '➕ Créer un nouveau devoir';
-                assignmentsList.appendChild(createButton);
-            }
-        }
-
-        // Charger les classes pour le chat
-        function loadChatClasses() {
-            const chatClassSelect = document.getElementById('chatClassSelect');
-            const assignmentClassSelect = document.getElementById('assignmentClass');
-            
-            chatClassSelect.innerHTML = '<option value="">Sélectionner une classe</option>';
-            assignmentClassSelect.innerHTML = '<option value="">Sélectionner une classe</option>';
-
-            let userClasses = [];
-            if (currentUser.role === 'professor') {
-                userClasses = database.classes.filter(c => c.teacherId === currentUser.id);
-            } else {
-                userClasses = database.classes.filter(c => c.students.includes(currentUser.id));
-            }
-
-            userClasses.forEach(classItem => {
-                const option1 = document.createElement('option');
-                option1.value = classItem.id;
-                option1.textContent = classItem.name;
-                chatClassSelect.appendChild(option1);
-
-                const option2 = document.createElement('option');
-                option2.value = classItem.id;
-                option2.textContent = classItem.name;
-                assignmentClassSelect.appendChild(option2);
-            });
-        }
-
-        // Créer une nouvelle classe
+        // Créer une classe
         function createClass() {
-            const name = document.getElementById('className').value;
-            const description = document.getElementById('classDescription').value;
+            const name = document.getElementById('className').value.trim();
+            const description = document.getElementById('classDescription').value.trim();
             const level = document.getElementById('classLevel').value;
 
             if (!name || !description || !level) {
@@ -971,291 +870,42 @@
             }
 
             const newClass = {
-                id: database.classes.length + 1,
+                id: Date.now(),
                 name: name,
                 description: description,
                 level: level,
-                teacher: currentUser.name,
                 teacherId: currentUser.id,
                 students: [],
-                code: generateClassCode(),
-                createdAt: new Date().toISOString().split('T')[0]
+                createdAt: new Date().toISOString()
             };
 
             database.classes.push(newClass);
             
-            // Réinitialiser le formulaire
+            // Vider les champs
             document.getElementById('className').value = '';
             document.getElementById('classDescription').value = '';
             document.getElementById('classLevel').value = '';
-            
+
+            // Recharger les données
             loadClasses();
             loadChatClasses();
+            loadManageClassOptions();
+            
             showNotification('Classe créée avec succès !', 'success');
         }
 
-        // Générer un code de classe
-        function generateClassCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < 8; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
+        // Ajouter un étudiant
+        function addStudent() {
+            const classId = parseInt(document.getElementById('manageClassSelect').value);
+            const studentName = document.getElementById('studentName').value.trim();
+            const studentEmail = document.getElementById('studentEmail').value.trim();
 
-        // Rejoindre une classe
-        function joinClass() {
-            const code = document.getElementById('classCode').value;
-            
-            if (!code) {
-                showNotification('Veuillez entrer un code de classe', 'error');
-                return;
-            }
-
-            const classToJoin = database.classes.find(c => c.code === code);
-            
-            if (!classToJoin) {
-                showNotification('Code de classe invalide', 'error');
-                return;
-            }
-
-            if (classToJoin.students.includes(currentUser.id)) {
-                showNotification('Vous êtes déjà dans cette classe', 'error');
-                return;
-            }
-
-            classToJoin.students.push(currentUser.id);
-            document.getElementById('classCode').value = '';
-            closeModal('joinClassModal');
-            loadClasses();
-            loadChatClasses();
-            showNotification('Vous avez rejoint la classe avec succès !', 'success');
-        }
-
-        // Créer un devoir
-        function createAssignment() {
-            const title = document.getElementById('assignmentTitle').value;
-            const description = document.getElementById('assignmentDescription').value;
-            const content = document.getElementById('mathEditor').textContent;
-            const dueDate = document.getElementById('assignmentDueDate').value;
-            const classId = parseInt(document.getElementById('assignmentClass').value);
-
-            if (!title || !description || !dueDate || !classId) {
+            if (!classId || !studentName || !studentEmail) {
                 showNotification('Veuillez remplir tous les champs', 'error');
                 return;
             }
 
-            const selectedClass = database.classes.find(c => c.id === classId);
-            const newAssignment = {
-                id: database.assignments.length + 1,
-                title: title,
-                description: description,
-                content: content,
-                dueDate: dueDate,
-                classId: classId,
-                className: selectedClass.name,
-                teacherId: currentUser.id,
-                status: 'active',
-                submissions: selectedClass.students.map(studentId => ({
-                    studentId: studentId,
-                    submittedAt: null,
-                    grade: null,
-                    status: 'pending'
-                }))
-            };
-
-            database.assignments.push(newAssignment);
-            
-            // Réinitialiser le formulaire
-            document.getElementById('assignmentTitle').value = '';
-            document.getElementById('assignmentDescription').value = '';
-            document.getElementById('mathEditor').textContent = 'Tapez ici vos formules mathématiques...';
-            document.getElementById('assignmentDueDate').value = '';
-            document.getElementById('assignmentClass').value = '';
-            
-            closeModal('assignmentModal');
-            loadAssignments();
-            showNotification('Devoir créé avec succès !', 'success');
-        }
-
-        // Changer de classe dans le chat
-        function switchChatClass() {
-            const classId = parseInt(document.getElementById('chatClassSelect').value);
-            currentChatClass = classId;
-            loadChatMessages();
-        }
-
-        // Charger les messages du chat
-        function loadChatMessages() {
-            const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = '';
-
-            if (!currentChatClass) {
-                chatMessages.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Sélectionnez une classe pour voir les messages</div>';
-                return;
-            }
-
-            const classMessages = database.messages.filter(m => m.classId === currentChatClass);
-            
-            classMessages.forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                
-                const time = new Date(message.timestamp).toLocaleTimeString('fr-FR', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                
-                messageDiv.innerHTML = `
-                    <div class="message-author">${message.userName}</div>
-                    <div class="message-time">${time}</div>
-                    <div>${message.message}</div>
-                `;
-                chatMessages.appendChild(messageDiv);
-            });
-
-            // Scroll vers le bas
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // Envoyer un message
-        function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
-
-            if (!message || !currentChatClass) {
-                return;
-            }
-
-            const newMessage = {
-                id: database.messages.length + 1,
-                classId: currentChatClass,
-                userId: currentUser.id,
-                userName: currentUser.name,
-                message: message,
-                timestamp: new Date().toISOString()
-            };
-
-            database.messages.push(newMessage);
-            messageInput.value = '';
-            loadChatMessages();
-        }
-
-        // Gérer la touche Entrée dans le chat
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        // Ouvrir une classe
-        function openClass(classId) {
-            const classItem = database.classes.find(c => c.id === classId);
-            showNotification(`Ouverture de la classe: ${classItem.name}`, 'success');
-            
-            // Sélectionner automatiquement la classe dans le chat
-            document.getElementById('chatClassSelect').value = classId;
-            switchChatClass();
-        }
-
-        // Soumettre un devoir
-        function submitAssignment(assignmentId) {
-            const assignment = database.assignments.find(a => a.id === assignmentId);
-            const submission = assignment.submissions.find(s => s.studentId === currentUser.id);
-            
-            if (submission) {
-                submission.submittedAt = new Date().toISOString();
-                submission.status = 'submitted';
-                loadAssignments();
-                showNotification('Devoir soumis avec succès !', 'success');
-            }
-        }
-
-        // Voir les soumissions
-        function viewSubmissions(assignmentId) {
-            const assignment = database.assignments.find(a => a.id === assignmentId);
-            showNotification(`Affichage des soumissions pour: ${assignment.title}`, 'success');
-        }
-
-        // Noter un devoir
-        function gradeAssignment(assignmentId) {
-            const assignment = database.assignments.find(a => a.id === assignmentId);
-            showNotification(`Interface de notation pour: ${assignment.title}`, 'success');
-        }
-
-        // Ouvrir un modal
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        // Fermer un modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        // Afficher une notification
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // Simulation d'utilisateurs en ligne
-        function updateOnlineUsers() {
-            const onlineUsers = document.getElementById('onlineUsers');
-            const users = ['Prof. Martin', 'Alice D.', 'Bob L.', 'Claire M.'];
-            
-            onlineUsers.innerHTML = users.map(user => 
-                `<div class="user-badge">${user}</div>`
-            ).join('');
-        }
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
-            updateOnlineUsers();
-            
-            // Simulation de messages en temps réel
-            setInterval(() => {
-                if (currentChatClass && Math.random() < 0.1) {
-                    const randomUsers = ['Alice D.', 'Bob L.', 'Claire M.'];
-                    const randomMessages = [
-                        'Je comprends mieux maintenant !',
-                        'Pouvez-vous répéter s\'il vous plaît ?',
-                        'Merci pour l\'explication !',
-                        'J\'ai terminé l\'exercice.',
-                        'Quelqu\'un peut m\'aider ?'
-                    ];
-                    
-                    const randomUser = randomUsers[Math.floor(Math.random() * randomUsers.length)];
-                    const randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
-                    
-                    const newMessage = {
-                        id: database.messages.length + 1,
-                        classId: currentChatClass,
-                        userId: Math.floor(Math.random() * 4) + 2,
-                        userName: randomUser,
-                        message: randomMessage,
-                        timestamp: new Date().toISOString()
-                    };
-                    
-                    database.messages.push(newMessage);
-                    loadChatMessages();
-                }
-            }, 5000);
-        });
-    </script>
-</body>
-</html>
+            // Vérifier si l'email existe déjà
+            const existingUser = database.users.find(u => u.email === studentEmail);
+            if (existingUser) {
+                showNotification('Cet email est
